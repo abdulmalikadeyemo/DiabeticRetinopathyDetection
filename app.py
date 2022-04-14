@@ -20,14 +20,25 @@ def get_y(r): return r['class']
 
 st.title("Diabetic Retinopathy Detection System")
 
+@st.cache(allow_output_mutation=True)
+def load_model(url):
+    modelLink = url
+    model = requests.get(modelLink).content
+    return model
+
+modelFile = load_model("https://www.dropbox.com/s/9uwtc2v4lk7yxl5/export.pkl?dl=0")
+model = BytesIO(modelFile)
+model = load_learner(model)
+
+
 path = Path()
 
-@st.cache(allow_output_mutation=True)
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1hHcW9HJ4uEh4MYrZgqKi6G1HfzYdZaGB"
-urllib.request.urlretrieve(MODEL_URL, "export.pkl")
-model = load_learner(Path("."), "export.pkl", cpu=True)
+# @st.cache(allow_output_mutation=True)
+# MODEL_URL = "https://drive.google.com/uc?export=download&id=1hHcW9HJ4uEh4MYrZgqKi6G1HfzYdZaGB"
+# urllib.request.urlretrieve(MODEL_URL, "export.pkl")
+# model = load_learner(Path("."), "export.pkl", cpu=True)
 
-# learner = load_learner(Path("."), "export.pkl")
+
 
 def predict(img, display_img):
     
