@@ -1,3 +1,8 @@
+from fastai.vision import *
+from fastai.imports import *
+from fastai.learner import *
+# from fastai.vision.all import *
+
 from fastai.vision.all import *
 import streamlit as st
 import numpy as np
@@ -8,6 +13,8 @@ from PIL import Image
 import requests
 from io import BytesIO
 
+
+path = Path()
 
 def get_x(r): return image_path/r['train_image_name']
 def get_y(r): return r['class']
@@ -25,7 +32,7 @@ def predict(img, display_img):
         time.sleep(3)      
   
   # Load model and make prediction
-    model = load_learner('./export.pkl', cpu=True)
+    model = load_learner(path/'export.pkl', cpu=True)
     pred_class = model.predict(img)[0] # get the predicted class
     pred_prob = round(torch.max(model.predict(img)[2]).item()*100) # get the max probability
 
@@ -43,12 +50,12 @@ option = st.radio('', ['Choose a test image'])
 if option == 'Choose a test image':
 
     # Test image selection
-    test_images = os.listdir('./data/sample/')
+    test_images = os.listdir(path/'data/sample/')
     test_image = st.selectbox(
         'Please select a test image:', test_images)
 
     # Read the image
-    file_path = './data/sample/' + test_image
+    file_path = path'/data/sample/' + test_image
     img = PILImage.create(file_path)
     # Get the image to display
     display_img = mpimg.imread(file_path)
