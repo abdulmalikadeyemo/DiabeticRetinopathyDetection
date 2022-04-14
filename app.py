@@ -55,7 +55,7 @@ if option == 'Choose a test image':
         'Please select a test image:', test_images)
 
     # Read the image
-    file_path = path'/data/sample/' + test_image
+    file_path = path/'data/sample/' + test_image
     img = PILImage.create(file_path)
     # Get the image to display
     display_img = mpimg.imread(file_path)
