@@ -12,14 +12,22 @@ import time
 from PIL import Image
 import requests
 from io import BytesIO
+import urllib.request
 
-
-path = Path()
 
 def get_x(r): return image_path/r['train_image_name']
 def get_y(r): return r['class']
 
 st.title("Diabetic Retinopathy Detection System")
+
+path = Path()
+
+@st.cache(allow_output_mutation=True)
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1hHcW9HJ4uEh4MYrZgqKi6G1HfzYdZaGB"
+urllib.request.urlretrieve(MODEL_URL, "export.pkl")
+model = load_learner(Path("."), "export.pkl", cpu=True)
+
+# learner = load_learner(Path("."), "export.pkl")
 
 def predict(img, display_img):
     
@@ -32,7 +40,8 @@ def predict(img, display_img):
         time.sleep(3)      
   
   # Load model and make prediction
-    model = load_learner(path/'export.pkl', cpu=True)
+#     model = load_learner(path/'export.pkl', cpu=True)
+    
     pred_class = model.predict(img)[0] # get the predicted class
     pred_prob = round(torch.max(model.predict(img)[2]).item()*100) # get the max probability
 
